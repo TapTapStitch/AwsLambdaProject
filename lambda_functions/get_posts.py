@@ -6,7 +6,8 @@ def get_posts():
     post_service = PostService()
     try:
         posts = post_service.get_all_posts()
-        return {"statusCode": 200, "body": json.dumps(posts)}
+        sorted_posts = sorted(posts, key=lambda x: x["createdDate"])
+        return {"statusCode": 200, "body": json.dumps(sorted_posts)}
     except Exception as e:
         return {
             "statusCode": 500,

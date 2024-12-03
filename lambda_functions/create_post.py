@@ -9,8 +9,13 @@ def create_post(event):
     tags = post_data.get("tags", [])
 
     post_service = PostService()
-    new_post = post_service.create_post(title, body, tags)
-    if new_post:
+    try:
+        new_post = post_service.create_post(title, body, tags)
         return {"statusCode": 201, "body": json.dumps(new_post)}
-    else:
-        return {"statusCode": 500, "body": json.dumps({"error": "Error creating post"})}
+    except ValueError as ve:
+        return {"statusCode": 422, "body": json.dumps({"error": str(ve)})}
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": "Error creating post", "details": str(e)}),
+        }

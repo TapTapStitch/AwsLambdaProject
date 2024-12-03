@@ -1,3 +1,2 @@
 black
 boto3
-pydantic

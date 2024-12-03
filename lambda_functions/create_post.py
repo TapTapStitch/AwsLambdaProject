@@ -2,7 +2,7 @@ import json
 from lambda_functions.lambda_layer.utils import PostService
 
 
-def lambda_handler(event, context):
+def create_post(event):
     post_data = json.loads(event["body"])
     title = post_data.get("title")
     body = post_data.get("body")

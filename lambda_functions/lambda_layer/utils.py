@@ -4,7 +4,7 @@ from boto3.dynamodb.conditions import Key
 
 
 class PostService:
-    def __init__(self, table_name="PostsTable", region_name="us-west-2"):
+    def __init__(self, table_name="PostsTable", region_name="eu-north-1"):
         self.dynamodb = boto3.resource("dynamodb", region_name=region_name)
         self.table = self.dynamodb.Table(table_name)
 

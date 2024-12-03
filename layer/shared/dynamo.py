@@ -2,23 +2,24 @@ import boto3
 import uuid
 from boto3.dynamodb.conditions import Key
 
+
 class PostService:
-    def __init__(self, table_name='PostsTable', region_name='us-west-2'):
-        self.dynamodb = boto3.resource('dynamodb', region_name=region_name)
+    def __init__(self, table_name="PostsTable", region_name="us-west-2"):
+        self.dynamodb = boto3.resource("dynamodb", region_name=region_name)
         self.table = self.dynamodb.Table(table_name)
 
     def get_all_posts(self):
         try:
             response = self.table.scan()
-            return response.get('Items', [])
+            return response.get("Items", [])
         except Exception as e:
             print(f"Error getting all posts: {e}")
             return []
 
     def get_post_by_id(self, post_id):
         try:
-            response = self.table.get_item(Key={'id': post_id})
-            return response.get('Item', None)
+            response = self.table.get_item(Key={"id": post_id})
+            return response.get("Item", None)
         except Exception as e:
             print(f"Error getting post by ID {post_id}: {e}")
             return None
@@ -27,12 +28,7 @@ class PostService:
         if tags is None:
             tags = []
         post_id = str(uuid.uuid4())
-        post_data = {
-            'id': post_id,
-            'title': title,
-            'body': body,
-            'tags': tags
-        }
+        post_data = {"id": post_id, "title": title, "body": body, "tags": tags}
         try:
             self.table.put_item(Item=post_data)
             return post_data
@@ -46,9 +42,9 @@ class PostService:
             expression_values = {f":{k}": v for k, v in update_data.items()}
 
             self.table.update_item(
-                Key={'id': post_id},
+                Key={"id": post_id},
                 UpdateExpression=expression,
-                ExpressionAttributeValues=expression_values
+                ExpressionAttributeValues=expression_values,
             )
             return self.get_post_by_id(post_id)
         except Exception as e:
@@ -57,7 +53,7 @@ class PostService:
 
     def delete_post(self, post_id):
         try:
-            self.table.delete_item(Key={'id': post_id})
+            self.table.delete_item(Key={"id": post_id})
             return True
         except Exception as e:
             print(f"Error deleting post {post_id}: {e}")

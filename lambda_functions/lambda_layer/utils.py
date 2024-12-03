@@ -36,7 +36,7 @@ class PostService:
             "body": body,
             "tags": tags,
             "createdDate": current_time,
-            "updatedDate": current_time
+            "updatedDate": current_time,
         }
         try:
             self.table.put_item(Item=post_data)

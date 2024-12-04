@@ -141,6 +141,30 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get Posts Public",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts/public",
+					"protocol": "https",
+					"host": [
+						"ftrm3yzgn4",
+						"execute-api",
+						"eu-north-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"production",
+						"posts",
+						"public"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

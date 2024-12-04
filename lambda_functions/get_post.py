@@ -5,14 +5,18 @@ from lambda_functions.lambda_layer.utils import PostService
 def get_post(event):
     post_id = event["pathParameters"]["id"]
     post_service = PostService()
-    try:
-        post = post_service.get_post_by_id(post_id)
-        if post:
-            return {"statusCode": 200, "body": json.dumps(post)}
-        else:
+    response = post_service.get_post_by_id(post_id)
+
+    if response["success"]:
+        return {"statusCode": 200, "body": json.dumps(response["data"])}
+    else:
+        error_message = response["error"]
+        if "not found" in error_message.lower():
             return {"statusCode": 404, "body": json.dumps({"error": "Post not found"})}
-    except Exception as e:
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"error": "Error retrieving post", "details": str(e)}),
-        }
+        else:
+            return {
+                "statusCode": 500,
+                "body": json.dumps(
+                    {"error": "Error retrieving post", "details": error_message}
+                ),
+            }

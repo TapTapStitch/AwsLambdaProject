@@ -4,12 +4,16 @@ from lambda_functions.lambda_layer.utils import PostService
 
 def get_posts():
     post_service = PostService()
-    try:
-        posts = post_service.get_all_posts()
-        sorted_posts = sorted(posts, key=lambda x: x["createdDate"])
+    response = post_service.get_all_posts()
+
+    if response["success"]:
+        sorted_posts = sorted(response["data"], key=lambda x: x["createdDate"])
         return {"statusCode": 200, "body": json.dumps(sorted_posts)}
-    except Exception as e:
+    else:
+        error_message = response["error"]
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": "Error retrieving posts", "details": str(e)}),
+            "body": json.dumps(
+                {"error": "Error retrieving posts", "details": error_message}
+            ),
         }

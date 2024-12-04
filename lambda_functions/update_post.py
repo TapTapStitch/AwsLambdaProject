@@ -7,19 +7,25 @@ def update_post(event):
     update_data = json.loads(event["body"])
 
     post_service = PostService()
-    try:
-        updated_post = post_service.update_post(post_id, update_data)
-        if updated_post:
-            return {"statusCode": 200, "body": json.dumps(updated_post)}
-        else:
+    response = post_service.update_post(post_id, update_data)
+
+    if response["success"]:
+        return {"statusCode": 200, "body": json.dumps(response["data"])}
+    else:
+        error_message = response["error"]
+        if "Validation error" in error_message:
+            return {
+                "statusCode": 422,
+                "body": json.dumps(
+                    {"error": "Validation error", "details": error_message}
+                ),
+            }
+        elif "not found" in error_message.lower():
             return {"statusCode": 404, "body": json.dumps({"error": "Post not found"})}
-    except ValueError as ve:
-        return {
-            "statusCode": 422,
-            "body": json.dumps({"error": "Validation error", "details": str(ve)}),
-        }
-    except Exception as e:
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"error": "Error updating post", "details": str(e)}),
-        }
+        else:
+            return {
+                "statusCode": 500,
+                "body": json.dumps(
+                    {"error": "Error updating post", "details": error_message}
+                ),
+            }

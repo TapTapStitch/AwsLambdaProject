@@ -11,6 +11,8 @@ def lambda_handler(event, context):
 
     if http_method == "GET" and path == "/posts":
         return get_posts()
+    if http_method == "GET" and path == "/posts/public":
+        return get_posts()
     elif http_method == "GET" and path.startswith("/post/"):
         return get_post(event)
     elif http_method == "POST" and path == "/posts":

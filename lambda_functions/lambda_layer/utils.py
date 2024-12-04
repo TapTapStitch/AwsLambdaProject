@@ -14,8 +14,8 @@ class PostService:
         post_schema = {
             "type": "object",
             "properties": {
-                "title": {"type": "string", "maxLength": 200},
-                "body": {"type": "string", "maxLength": 2000},
+                "title": {"type": "string", "minLength": 1, "maxLength": 200},
+                "body": {"type": "string", "minLength": 1, "maxLength": 2000},
                 "tags": {"type": "array", "items": {"type": "string"}},
             },
             "required": ["title", "body"],

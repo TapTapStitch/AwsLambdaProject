@@ -24,6 +24,18 @@
 					"path": [
 						"production",
 						"posts"
+					],
+					"query": [
+						{
+							"key": "tags",
+							"value": "post",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -148,7 +160,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts/public",
+					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts/public?tags=post&limit=5",
 					"protocol": "https",
 					"host": [
 						"ftrm3yzgn4",
@@ -161,6 +173,16 @@
 						"production",
 						"posts",
 						"public"
+					],
+					"query": [
+						{
+							"key": "tags",
+							"value": "post"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
 					]
 				}
 			},

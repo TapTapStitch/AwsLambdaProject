@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Dary Application API
+  title: Diary Application API
   description: REST API for CRUD operations on posts
   version: 1.0.0
 

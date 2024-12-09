@@ -39,6 +39,12 @@ class PostService:
     def _response(self, success, data=None, error=None):
         return {"success": success, "data": data, "error": error}
 
+    def _create_update_expression(self, update_data):
+        update_data["updatedDate"] = datetime.now(timezone.utc).isoformat()
+        expression = "SET " + ", ".join(f"{k}=:{k}" for k in update_data.keys())
+        expression_values = {f":{k}": v for k, v in update_data.items()}
+        return expression, expression_values
+
     @exception_handler
     def get_all_posts(self):
         response = self.table.scan()
@@ -82,9 +88,7 @@ class PostService:
     def update_post(self, post_id, update_data):
         self._validate_post_data(update_data)
 
-        update_data["updatedDate"] = datetime.now(timezone.utc).isoformat()
-        expression = "SET " + ", ".join(f"{k}=:{k}" for k in update_data.keys())
-        expression_values = {f":{k}": v for k, v in update_data.items()}
+        expression, expression_values = self._create_update_expression(update_data)
 
         self.table.update_item(
             Key={"id": post_id},

@@ -12,6 +12,21 @@ paths:
     get:
       summary: Retrieve all posts
       operationId: getPosts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tags
+          in: query
+          description: Filter posts by tags
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Limit the number of posts returned
+          required: false
+          schema:
+            type: integer
       responses:
         '200':
           description: A list of posts
@@ -21,9 +36,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
     post:
       summary: Create a new post
       operationId: createPost
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -37,11 +59,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
   /post/{id}:
     get:
       summary: Retrieve a specific post by ID
       operationId: getPostById
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -57,11 +85,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Post'
         '404':
-          description: Post not found
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
     patch:
       summary: Update an existing post
       operationId: updatePost
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -83,11 +115,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Post'
         '404':
-          description: Post not found
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
     delete:
       summary: Delete a post
       operationId: deletePost
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -99,9 +137,76 @@ paths:
         '204':
           description: Post deleted successfully
         '404':
-          description: Post not found
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /public/posts:
+    get:
+      summary: Retrieve all public posts
+      operationId: getPublicPosts
+      responses:
+        '200':
+          description: A list of public posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicPost'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+    UnprocessableEntity:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: string
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: string
+
   schemas:
     Post:
       type: object
@@ -109,6 +214,26 @@ components:
         id:
           type: string
           format: uuid
+        title:
+          type: string
+          maxLength: 200
+        body:
+          type: string
+          maxLength: 2000
+        createdDate:
+          type: string
+          format: date-time
+        updatedDate:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            type: string
+
+    PublicPost:
+      type: object
+      properties:
         title:
           type: string
           maxLength: 200

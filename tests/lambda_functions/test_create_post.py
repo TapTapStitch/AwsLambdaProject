@@ -1,6 +1,6 @@
 import pytest
 import json
-from lambda_functions.create_post import create_post
+from lambda_functions.create_post import lambda_handler
 
 
 class MockPostService:
@@ -64,7 +64,7 @@ def test_create_post_success(mock_post_service_success):
         )
     }
 
-    result = create_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 201
     body = json.loads(result["body"])
@@ -80,7 +80,7 @@ def test_create_post_validation_error(mock_post_service_validation_error):
         )
     }
 
-    result = create_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 422
     body = json.loads(result["body"])
@@ -94,7 +94,7 @@ def test_create_post_error(mock_post_service_error):
         )
     }
 
-    result = create_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 500
     body = json.loads(result["body"])

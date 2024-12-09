@@ -1,6 +1,6 @@
 import pytest
 import json
-from lambda_functions.get_posts import get_posts
+from lambda_functions.get_posts import lambda_handler
 
 
 class MockPostService:
@@ -50,7 +50,7 @@ def mock_post_service_error(monkeypatch):
 
 def test_get_posts_success(mock_post_service_success):
     event = {"queryStringParameters": None}
-    result = get_posts(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 200
     body = json.loads(result["body"])
@@ -61,7 +61,7 @@ def test_get_posts_success(mock_post_service_success):
 
 def test_get_posts_with_tags(mock_post_service_success):
     event = {"queryStringParameters": {"tags": "tech"}}
-    result = get_posts(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 200
     body = json.loads(result["body"])
@@ -71,7 +71,7 @@ def test_get_posts_with_tags(mock_post_service_success):
 
 def test_get_posts_with_limit(mock_post_service_success):
     event = {"queryStringParameters": {"limit": "1"}}
-    result = get_posts(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 200
     body = json.loads(result["body"])
@@ -81,7 +81,7 @@ def test_get_posts_with_limit(mock_post_service_success):
 
 def test_get_posts_with_invalid_limit(mock_post_service_success):
     event = {"queryStringParameters": {"limit": "invalid"}}
-    result = get_posts(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 400
     body = json.loads(result["body"])
@@ -91,7 +91,7 @@ def test_get_posts_with_invalid_limit(mock_post_service_success):
 
 def test_get_posts_error(mock_post_service_error):
     event = {"queryStringParameters": None}
-    result = get_posts(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 500
     body = json.loads(result["body"])

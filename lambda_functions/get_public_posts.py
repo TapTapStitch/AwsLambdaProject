@@ -2,7 +2,7 @@ import json
 from lambda_functions.lambda_layer.utils import PostService
 
 
-def get_public_posts(event):
+def lambda_handler(event, context):
     query_params = event.get("queryStringParameters") or {}
     tags = query_params.get("tags")
     limit = query_params.get("limit")

@@ -1,6 +1,6 @@
 import pytest
 import json
-from lambda_functions.get_post import get_post
+from lambda_functions.get_post import lambda_handler
 
 
 class MockPostService:
@@ -51,7 +51,7 @@ def mock_post_service_error(monkeypatch):
 
 def test_get_post_success(mock_post_service_success):
     event = {"pathParameters": {"id": "1"}}
-    result = get_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 200
     body = json.loads(result["body"])
@@ -61,7 +61,7 @@ def test_get_post_success(mock_post_service_success):
 
 def test_get_post_not_found(mock_post_service_not_found):
     event = {"pathParameters": {"id": "999"}}
-    result = get_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 404
     body = json.loads(result["body"])
@@ -70,7 +70,7 @@ def test_get_post_not_found(mock_post_service_not_found):
 
 def test_get_post_error(mock_post_service_error):
     event = {"pathParameters": {"id": "1"}}
-    result = get_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 500
     body = json.loads(result["body"])

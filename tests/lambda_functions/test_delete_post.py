@@ -1,6 +1,6 @@
 import pytest
 import json
-from lambda_functions.delete_post import delete_post
+from lambda_functions.delete_post import lambda_handler
 
 
 class MockPostService:
@@ -47,7 +47,7 @@ def mock_post_service_error(monkeypatch):
 def test_delete_post_success(mock_post_service_success):
     event = {"pathParameters": {"id": "1"}}
 
-    result = delete_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 204
     assert result["body"] == ""
@@ -56,7 +56,7 @@ def test_delete_post_success(mock_post_service_success):
 def test_delete_post_not_found(mock_post_service_not_found):
     event = {"pathParameters": {"id": "999"}}
 
-    result = delete_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 404
     body = json.loads(result["body"])
@@ -66,7 +66,7 @@ def test_delete_post_not_found(mock_post_service_not_found):
 def test_delete_post_error(mock_post_service_error):
     event = {"pathParameters": {"id": "1"}}
 
-    result = delete_post(event)
+    result = lambda_handler(event, None)
 
     assert result["statusCode"] == 500
     body = json.loads(result["body"])

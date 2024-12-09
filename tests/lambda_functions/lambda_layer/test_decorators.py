@@ -1,4 +1,3 @@
-import pytest
 from jsonschema import ValidationError
 from lambda_functions.lambda_layer.decorators import exception_handler
 

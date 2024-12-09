@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudFormation template for Diary Application (REST API with Lambda, API Gateway, DynamoDB, Cognito)
+
+Parameters:
+  StageName:
+    Type: String
+    Default: "dev"
+    Description: Deployment stage (e.g., dev, prod)
+
+Resources:
+  # DynamoDB Table
+  PostsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "PostsTable"
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  # Cognito User Pool
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: "DiaryAppUserPool"
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: "DiaryAppClient"
+      UserPoolId: !Ref CognitoUserPool
+      GenerateSecret: false
+
+  # Lambda Execution Role
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "DiaryAppLambdaExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: "DiaryAppLambdaPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                Resource: !GetAtt PostsTable.Arn
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "arn:aws:logs:*:*:*"
+
+  # Lambda Functions
+  GetPostsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "GetPosts"
+      Runtime: python3.13
+      Handler: lambda_functions.get_posts.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: "<s3-bucket>"
+        S3Key: "<zip-file-path>"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref PostsTable
+
+  GetPostFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "GetPost"
+      Runtime: python3.13
+      Handler: lambda_functions.get_post.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: "<s3-bucket>"
+        S3Key: "<zip-file-path>"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref PostsTable
+
+  PostPostFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "PostPost"
+      Runtime: python3.13
+      Handler: lambda_functions.create_post.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: "<s3-bucket>"
+        S3Key: "<zip-file-path>"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref PostsTable
+
+  PatchPostFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "PatchPost"
+      Runtime: python3.13
+      Handler: lambda_functions.update_post.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: "<s3-bucket>"
+        S3Key: "<zip-file-path>"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref PostsTable
+
+  DeletePostFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "DeletePost"
+      Runtime: python3.13
+      Handler: lambda_functions.delete_post.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: "<s3-bucket>"
+        S3Key: "<zip-file-path>"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref PostsTable
+
+  # API Gateway
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: "DiaryAppApi"
+
+  ApiGatewayResourcePosts:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
+      PathPart: "posts"
+      RestApiId: !Ref ApiGatewayRestApi
+
+  ApiGatewayMethodGetPosts:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ApiGatewayRestApi
+      ResourceId: !Ref ApiGatewayResourcePosts
+      HttpMethod: GET
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref CognitoUserPool
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub
+          - arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations
+          - { Region: !Ref "AWS::Region", LambdaArn: !GetAtt GetPostsFunction.Arn }
+
+Outputs:
+  ApiUrl:
+    Description: URL of the deployed API
+    Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/"

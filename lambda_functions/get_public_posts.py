@@ -27,7 +27,11 @@ def lambda_handler(event, context):
                     "statusCode": 400,
                     "body": json.dumps({"error": "Invalid limit parameter"}),
                 }
-        return {"statusCode": 200, "body": json.dumps(sorted_posts)}
+        public_posts = [
+            {key: value for key, value in post.items() if key != "id"}
+            for post in sorted_posts
+        ]
+        return {"statusCode": 200, "body": json.dumps(public_posts)}
     else:
         error_message = response["error"]
         return {

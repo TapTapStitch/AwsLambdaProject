@@ -2,7 +2,7 @@ import json
 from lambda_functions.lambda_layer.utils import PostService
 
 
-def delete_post(event):
+def lambda_handler(event, context):
     post_id = event["pathParameters"]["id"]
     post_service = PostService()
     response = post_service.delete_post(post_id)

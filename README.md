@@ -54,7 +54,7 @@ Use Postman for manual testing and validation of your API endpoints. Create coll
 
 ## Description
 
-Create `Dary Application` - REST API that allows CRUD operations for posts
+Create `Diary Application` - REST API that allows CRUD operations for posts
 
 Proposed API endpoints:
  - GET /posts
@@ -121,7 +121,7 @@ Use JsonSchema or Pydantic for request validation to ensure that incoming data c
 
 Deploy your Lambda functions, DynamoDB table, API Gateway configuration, and other resources using AWS CloudFormation or AWS Management Console.
 
-By following these steps, you'll create a scalable and efficient REST API for managing posts in the `Dary Application`, leveraging AWS Lambda, API Gateway, DynamoDB, and other relevant tools. Adjustments can be made based on specific requirements or additional features needed for your application.
+By following these steps, you'll create a scalable and efficient REST API for managing posts in the `Diary Application`, leveraging AWS Lambda, API Gateway, DynamoDB, and other relevant tools. Adjustments can be made based on specific requirements or additional features needed for your application.
 
 To implement the `GET /posts` and `PATCH /post/{id}` endpoints with the specified requirements using AWS Lambda, API Gateway, and DynamoDB, here’s how you can proceed:
 
@@ -160,7 +160,7 @@ To implement the `GET /posts` and `PATCH /post/{id}` endpoints with the specifie
 - **DynamoDB Table**: Ensure your DynamoDB table (`PostsTable` in the examples) has the necessary attributes (`id`, `title`, `body`, `createdDate`, `updatedDate`, `tags`) defined.
 - **Error Handling**: Implement appropriate error handling in Lambda functions for cases like item not found, validation errors, etc.
 
-By following these steps and customizing the examples to fit your specific requirements and DynamoDB setup, you can effectively implement the `GET /posts` and `PATCH /post/{id}` endpoints for your `Dary Application` using AWS Lambda, API Gateway, and DynamoDB.
+By following these steps and customizing the examples to fit your specific requirements and DynamoDB setup, you can effectively implement the `GET /posts` and `PATCH /post/{id}` endpoints for your `Diary Application` using AWS Lambda, API Gateway, and DynamoDB.
 
 ## OAuth 2.0 authorization token (Cognito)
 
@@ -295,7 +295,7 @@ Create a Swagger (OpenAPI) file (`swagger.yaml`) that:
 
 ### 4. Postman Collection
 
-Create a Postman collection (`Dary Application.postman_collection.json`) that:
+Create a Postman collection (`Diary Application.postman_collection.json`) that:
 - Includes requests for each API endpoint (GET, POST, PATCH, DELETE).
 - Provides sample payloads for request testing.
 - Contains tests to verify API responses (positive and negative scenarios).
@@ -311,7 +311,7 @@ Use AWS CloudFormation for deploying and deleting your stack:
 Your repository structure might look like this:
 
 ```
-|-- dary-application/
+|-- diary-application/
     |-- lambda_functions/
         |-- get_posts.py
         |-- create_post.py
@@ -326,7 +326,7 @@ Your repository structure might look like this:
         |-- test_update_post.py
         |-- test_delete_post.py
     |-- swagger.yaml
-    |-- Dary_Application.postman_collection.json
+    |-- Diary_Application.postman_collection.json
     |-- template.yaml
     |-- README.md
 ```

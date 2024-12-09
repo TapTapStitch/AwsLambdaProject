@@ -70,7 +70,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "GetPosts"
-      Runtime: python3.9
+      Runtime: python3.13
       Handler: lambda_functions.get_posts.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -84,7 +84,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "GetPost"
-      Runtime: python3.9
+      Runtime: python3.13
       Handler: lambda_functions.get_post.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -98,7 +98,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "PostPost"
-      Runtime: python3.9
+      Runtime: python3.13
       Handler: lambda_functions.create_post.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -112,7 +112,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "PatchPost"
-      Runtime: python3.9
+      Runtime: python3.13
       Handler: lambda_functions.update_post.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -126,7 +126,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "DeletePost"
-      Runtime: python3.9
+      Runtime: python3.13
       Handler: lambda_functions.delete_post.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:

@@ -24,12 +24,3 @@
 
 6. **tags** (List of Strings, Optional)
    - A list of tags associated with the post. This field is optional.
-
-## Instructions to Create Table Using AWS CLI:
-
-```bash
-aws dynamodb create-table \
-    --table-name PostsTable \
-    --attribute-definitions AttributeName=id,AttributeType=S \
-    --key-schema AttributeName=id,KeyType=HASH \
-    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5

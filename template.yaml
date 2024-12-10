@@ -65,6 +65,17 @@ Resources:
                   - logs:PutLogEvents
                 Resource: "arn:aws:logs:*:*:*"
 
+  # Lambda Layer
+  CommonDependenciesLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: "CommonDependenciesLayer"
+      CompatibleRuntimes:
+        - python3.13
+      Content:
+        S3Bucket: "<s3-bucket-for-layer>"
+        S3Key: "<path-to-layer-zip>"
+
   # Lambda Functions
   GetPostsFunction:
     Type: AWS::Lambda::Function
@@ -76,9 +87,8 @@ Resources:
       Code:
         S3Bucket: "<s3-bucket>"
         S3Key: "<zip-file-path>"
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref PostsTable
+      Layers:
+        - !Ref CommonDependenciesLayer
 
   GetPostFunction:
     Type: AWS::Lambda::Function
@@ -90,9 +100,8 @@ Resources:
       Code:
         S3Bucket: "<s3-bucket>"
         S3Key: "<zip-file-path>"
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref PostsTable
+      Layers:
+        - !Ref CommonDependenciesLayer
 
   PostPostFunction:
     Type: AWS::Lambda::Function
@@ -104,9 +113,8 @@ Resources:
       Code:
         S3Bucket: "<s3-bucket>"
         S3Key: "<zip-file-path>"
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref PostsTable
+      Layers:
+        - !Ref CommonDependenciesLayer
 
   PatchPostFunction:
     Type: AWS::Lambda::Function
@@ -118,9 +126,8 @@ Resources:
       Code:
         S3Bucket: "<s3-bucket>"
         S3Key: "<zip-file-path>"
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref PostsTable
+      Layers:
+        - !Ref CommonDependenciesLayer
 
   DeletePostFunction:
     Type: AWS::Lambda::Function
@@ -132,9 +139,8 @@ Resources:
       Code:
         S3Bucket: "<s3-bucket>"
         S3Key: "<zip-file-path>"
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref PostsTable
+      Layers:
+        - !Ref CommonDependenciesLayer
 
   # API Gateway
   ApiGatewayRestApi:

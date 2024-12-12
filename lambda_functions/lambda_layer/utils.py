@@ -10,7 +10,7 @@ from lambda_functions.lambda_layer.decorators import exception_handler
 class PostService:
     def __init__(
         self,
-        table_name="PostsTable",
+        table_name="posts",
         region_name="eu-north-1",
         schema_path="schemas/post.json",
     ):

@@ -1,176 +1,259 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
 Description: CloudFormation template for Diary Application (REST API with Lambda, API Gateway, DynamoDB, Cognito)
 
-Parameters:
-  StageName:
-    Type: String
-    Default: "dev"
-    Description: Deployment stage (e.g., dev, prod)
-
 Resources:
-  # DynamoDB Table
-  PostsTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: "PostsTable"
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
-      BillingMode: PAY_PER_REQUEST
-
-  # Cognito User Pool
-  CognitoUserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      UserPoolName: "DiaryAppUserPool"
-
-  CognitoUserPoolClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      ClientName: "DiaryAppClient"
-      UserPoolId: !Ref CognitoUserPool
-      GenerateSecret: false
-
-  # Lambda Execution Role
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "DiaryAppLambdaExecutionRole"
+      RoleName: LambdaDDBAccessRole
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
       Policies:
-        - PolicyName: "DiaryAppLambdaPolicy"
+        - PolicyName: LambdaBasicExecution
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
-              - Effect: Allow
-                Action:
-                  - dynamodb:Query
-                  - dynamodb:PutItem
-                  - dynamodb:UpdateItem
-                  - dynamodb:DeleteItem
-                Resource: !GetAtt PostsTable.Arn
               - Effect: Allow
                 Action:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
-                Resource: "arn:aws:logs:*:*:*"
+                Resource: '*'
+        - PolicyName: LambdaDDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/posts'
 
-  # Lambda Layer
-  CommonDependenciesLayer:
-    Type: AWS::Lambda::LayerVersion
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
     Properties:
-      LayerName: "CommonDependenciesLayer"
+      UserPoolName: MyUserPool
+      AutoVerifiedAttributes:
+        - email
+
+  CognitoResourceServer:
+    Type: AWS::Cognito::UserPoolResourceServer
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      Identifier: my-resource-server
+      Name: MyResourceServer
+      Scopes:
+        - ScopeName: read
+          ScopeDescription: Read access
+        - ScopeName: write
+          ScopeDescription: Write access
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: MyUserPoolClient
+      UserPoolId: !Ref CognitoUserPool
+      GenerateSecret: true
+      ExplicitAuthFlows:
+        - ADMIN_NO_SRP_AUTH
+        - USER_PASSWORD_AUTH
+      SupportedIdentityProviders:
+        - COGNITO
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthScopes:
+        - openid
+        - profile
+        - email
+      AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - https://oauth.pstmn.io/v1/browser-callback
+        - https://oauth.pstmn.io/v1/callback
+      LogoutURLs:
+        - https://www.example.com/logout
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: diary-app
+      UserPoolId: !Ref CognitoUserPool
+
+  MyLambdaLayer:
+    Type: 'AWS::Serverless::LayerVersion'
+    Properties:
+      LayerName: my-lambda-layer
+      ContentUri: ./lambda_functions/lambda_layer
       CompatibleRuntimes:
         - python3.13
-      Content:
-        S3Bucket: "<s3-bucket-for-layer>"
-        S3Key: "<path-to-layer-zip>"
+      RetentionPolicy: Retain
 
-  # Lambda Functions
-  GetPostsFunction:
-    Type: AWS::Lambda::Function
+  ApiGateway:
+    Type: AWS::Serverless::Api
     Properties:
-      FunctionName: "GetPosts"
+      Name: MyApi
+      StageName: dev
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt CognitoUserPool.Arn
+
+  GetPostsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: getPosts
+      Handler: get_posts.lambda_handler
       Runtime: python3.13
-      Handler: lambda_functions.get_posts.lambda_handler
+      CodeUri: ./lambda_functions/get_posts
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        S3Bucket: "<s3-bucket>"
-        S3Key: "<zip-file-path>"
       Layers:
-        - !Ref CommonDependenciesLayer
+        - Ref: MyLambdaLayer
+      Events:
+        GetPostsApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /posts
+            Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
+
+  GetPostsPublicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: getPostsPublic
+      Handler: get_public_posts.lambda_handler
+      Runtime: python3.13
+      CodeUri: ./lambda_functions/get_public_posts
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Layers:
+        - Ref: MyLambdaLayer
+      Events:
+        GetPostsPublicApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /posts/public
+            Method: get
+            Auth:
+              Authorizer: NONE
 
   GetPostFunction:
-    Type: AWS::Lambda::Function
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName: "GetPost"
+      FunctionName: getPostById
+      Handler: get_post.lambda_handler
       Runtime: python3.13
-      Handler: lambda_functions.get_post.lambda_handler
+      CodeUri: ./lambda_functions/get_post
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        S3Bucket: "<s3-bucket>"
-        S3Key: "<zip-file-path>"
       Layers:
-        - !Ref CommonDependenciesLayer
+        - Ref: MyLambdaLayer
+      Events:
+        GetPostByIdApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /posts/{postId}
+            Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
 
-  PostPostFunction:
-    Type: AWS::Lambda::Function
+  CreatePostFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName: "PostPost"
+      FunctionName: createPost
+      Handler: create_post.lambda_handler
       Runtime: python3.13
-      Handler: lambda_functions.create_post.lambda_handler
+      CodeUri: ./lambda_functions/create_post
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        S3Bucket: "<s3-bucket>"
-        S3Key: "<zip-file-path>"
       Layers:
-        - !Ref CommonDependenciesLayer
+        - Ref: MyLambdaLayer
+      Events:
+        CreatePostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /posts
+            Method: post
+            Auth:
+              Authorizer: CognitoAuthorizer
 
-  PatchPostFunction:
-    Type: AWS::Lambda::Function
+  UpdatePostFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName: "PatchPost"
+      FunctionName: updatePost
+      Handler: update_post.lambda_handler
       Runtime: python3.13
-      Handler: lambda_functions.update_post.lambda_handler
+      CodeUri: ./lambda_functions/update_post
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        S3Bucket: "<s3-bucket>"
-        S3Key: "<zip-file-path>"
       Layers:
-        - !Ref CommonDependenciesLayer
+        - Ref: MyLambdaLayer
+      Events:
+        UpdatePostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /posts/{postId}
+            Method: patch
+            Auth:
+              Authorizer: CognitoAuthorizer
 
   DeletePostFunction:
-    Type: AWS::Lambda::Function
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName: "DeletePost"
+      FunctionName: deletePost
+      Handler: delete_post.lambda_handler
       Runtime: python3.13
-      Handler: lambda_functions.delete_post.lambda_handler
+      CodeUri: ./lambda_functions/delete_post
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        S3Bucket: "<s3-bucket>"
-        S3Key: "<zip-file-path>"
       Layers:
-        - !Ref CommonDependenciesLayer
+        - Ref: MyLambdaLayer
+      Events:
+        DeletePostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /posts/{postId}
+            Method: delete
+            Auth:
+              Authorizer: CognitoAuthorizer
 
-  # API Gateway
-  ApiGatewayRestApi:
-    Type: AWS::ApiGateway::RestApi
+  PostsTable:
+    Type: AWS::DynamoDB::Table
     Properties:
-      Name: "DiaryAppApi"
-
-  ApiGatewayResourcePosts:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId
-      PathPart: "posts"
-      RestApiId: !Ref ApiGatewayRestApi
-
-  ApiGatewayMethodGetPosts:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      RestApiId: !Ref ApiGatewayRestApi
-      ResourceId: !Ref ApiGatewayResourcePosts
-      HttpMethod: GET
-      AuthorizationType: COGNITO_USER_POOLS
-      AuthorizerId: !Ref CognitoUserPool
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: POST
-        Uri: !Sub
-          - arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations
-          - { Region: !Ref "AWS::Region", LambdaArn: !GetAtt GetPostsFunction.Arn }
+      TableName: posts
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
 
 Outputs:
-  ApiUrl:
-    Description: URL of the deployed API
-    Value: !Sub "https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/"
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com"
+  CognitoUserPoolId:
+    Description: "Cognito User Pool ID"
+    Value: !Ref CognitoUserPool
+  CognitoUserPoolClientId:
+    Description: "Cognito User Pool Client ID"
+    Value: !Ref CognitoUserPoolClient
+  PostsTableName:
+    Description: The name of the DynamoDB table
+    Value: !Ref PostsTable
+  CognitoUserPoolClientSecret:
+    Description: "Cognito User Pool Client Secret"
+    Value: !GetAtt CognitoUserPoolClient.ClientSecret

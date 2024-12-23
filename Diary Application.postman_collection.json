@@ -15,6 +15,16 @@
 						{
 							"name": "When title is blank",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -27,17 +37,12 @@
 									}
 								},
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/posts",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"posts"
 									]
 								}
@@ -47,6 +52,16 @@
 						{
 							"name": "When body is blank",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -59,17 +74,12 @@
 									}
 								},
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/posts",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"posts"
 									]
 								}
@@ -96,6 +106,16 @@
 								}
 							],
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PATCH",
 								"header": [],
 								"body": {
@@ -108,17 +128,12 @@
 									}
 								},
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"post",
 										"dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682"
 									]
@@ -141,6 +156,16 @@
 								}
 							],
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PATCH",
 								"header": [],
 								"body": {
@@ -153,17 +178,12 @@
 									}
 								},
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"post",
 										"dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682"
 									]
@@ -186,6 +206,16 @@
 								}
 							],
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PATCH",
 								"header": [],
 								"body": {
@@ -198,17 +228,12 @@
 									}
 								},
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/some_wrong_id",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/post/some_wrong_id",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"post",
 										"some_wrong_id"
 									]
@@ -224,20 +249,25 @@
 						{
 							"name": "When id wrong",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/wrong_id",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/post/wrong_id",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"post",
 										"wrong_id"
 									]
@@ -253,20 +283,25 @@
 						{
 							"name": "When id wrong",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer {{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/wrong_id",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/{{env}}/post/wrong_id",
 									"host": [
-										"ftrm3yzgn4",
-										"execute-api",
-										"eu-north-1",
-										"amazonaws",
-										"com"
+										"{{baseUrl}}"
 									],
 									"path": [
-										"production",
+										"{{env}}",
 										"post",
 										"wrong_id"
 									]
@@ -315,20 +350,25 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer {{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts",
-					"protocol": "https",
+					"raw": "{{baseUrl}}/{{env}}/posts",
 					"host": [
-						"ftrm3yzgn4",
-						"execute-api",
-						"eu-north-1",
-						"amazonaws",
-						"com"
+						"{{baseUrl}}"
 					],
 					"path": [
-						"production",
+						"{{env}}",
 						"posts"
 					],
 					"query": [
@@ -383,6 +423,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer {{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -395,17 +445,12 @@
 					}
 				},
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts",
-					"protocol": "https",
+					"raw": "{{baseUrl}}/{{env}}/posts",
 					"host": [
-						"ftrm3yzgn4",
-						"execute-api",
-						"eu-north-1",
-						"amazonaws",
-						"com"
+						"{{baseUrl}}"
 					],
 					"path": [
-						"production",
+						"{{env}}",
 						"posts"
 					]
 				}
@@ -447,6 +492,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer {{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [],
 				"body": {
@@ -459,17 +514,12 @@
 					}
 				},
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
-					"protocol": "https",
+					"raw": "{{baseUrl}}/{{env}}/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
 					"host": [
-						"ftrm3yzgn4",
-						"execute-api",
-						"eu-north-1",
-						"amazonaws",
-						"com"
+						"{{baseUrl}}"
 					],
 					"path": [
-						"production",
+						"{{env}}",
 						"post",
 						"dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682"
 					]
@@ -512,20 +562,25 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer {{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
-					"protocol": "https",
+					"raw": "{{baseUrl}}/{{env}}/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
 					"host": [
-						"ftrm3yzgn4",
-						"execute-api",
-						"eu-north-1",
-						"amazonaws",
-						"com"
+						"{{baseUrl}}"
 					],
 					"path": [
-						"production",
+						"{{env}}",
 						"post",
 						"dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682"
 					]
@@ -556,20 +611,25 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer {{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
-					"protocol": "https",
+					"raw": "{{baseUrl}}/{{env}}/post/dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682",
 					"host": [
-						"ftrm3yzgn4",
-						"execute-api",
-						"eu-north-1",
-						"amazonaws",
-						"com"
+						"{{baseUrl}}"
 					],
 					"path": [
-						"production",
+						"{{env}}",
 						"post",
 						"dfc9ec9c-85d0-4ef1-ac3a-7955d5afa682"
 					]
@@ -616,28 +676,25 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://ftrm3yzgn4.execute-api.eu-north-1.amazonaws.com/production/posts/public?tags=post&limit=5",
-					"protocol": "https",
+					"raw": "{{baseUrl}}/{{env}}/posts/public",
 					"host": [
-						"ftrm3yzgn4",
-						"execute-api",
-						"eu-north-1",
-						"amazonaws",
-						"com"
+						"{{baseUrl}}"
 					],
 					"path": [
-						"production",
+						"{{env}}",
 						"posts",
 						"public"
 					],
 					"query": [
 						{
 							"key": "tags",
-							"value": "post"
+							"value": "post",
+							"disabled": true
 						},
 						{
 							"key": "limit",
-							"value": "5"
+							"value": "5",
+							"disabled": true
 						}
 					]
 				}

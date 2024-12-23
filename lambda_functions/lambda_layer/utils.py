@@ -15,7 +15,7 @@ def post_schema():
             "tags": {"type": "array", "items": {"type": "string"}},
         },
         "required": ["title", "body"],
-        "additionalProperties": False,
+        "additionalProperties": False
     }
     return schema
 

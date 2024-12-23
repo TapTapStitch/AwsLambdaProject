@@ -1,4 +1,3 @@
-import json
 import boto3
 import uuid
 from datetime import datetime, timezone
@@ -7,24 +6,27 @@ from jsonschema import validate
 from lambda_functions.lambda_layer.decorators import exception_handler
 
 
+def post_schema():
+    schema = {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string", "minLength": 1, "maxLength": 200},
+            "body": {"type": "string", "minLength": 1, "maxLength": 2000},
+            "tags": {"type": "array", "items": {"type": "string"}},
+        },
+        "required": ["title", "body"],
+        "additionalProperties": False
+    }
+    return schema
+
+
 class PostService:
-    def __init__(
-        self,
-        table_name="posts",
-        region_name="eu-north-1",
-        schema_path="schemas/post.json",
-    ):
+    def __init__(self, table_name="posts", region_name="eu-north-1"):
         self.dynamodb = boto3.resource("dynamodb", region_name=region_name)
         self.table = self.dynamodb.Table(table_name)
-        self.schema_path = schema_path
-        self.post_schema = self._load_schema()
-
-    def _load_schema(self):
-        with open(self.schema_path, "r") as file:
-            return json.load(file)
 
     def _validate_post_data(self, data):
-        validate(instance=data, schema=self.post_schema)
+        validate(instance=data, schema=post_schema())
 
     def _format_post_data(self, post_data):
         return {

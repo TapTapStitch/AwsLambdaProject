@@ -187,7 +187,7 @@ Resources:
             Path: /posts
             Method: post
             Auth:
-              Authorizer: NONE
+              Authorizer: CognitoAuthorizer
 
   UpdatePostFunction:
     Type: AWS::Serverless::Function
@@ -207,7 +207,7 @@ Resources:
             Path: /posts/{postId}
             Method: patch
             Auth:
-              Authorizer: NONE
+              Authorizer: CognitoAuthorizer
 
   DeletePostFunction:
     Type: AWS::Serverless::Function

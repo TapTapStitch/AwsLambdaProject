@@ -42,6 +42,14 @@ else
     echo "Warning: lambda_layer/requirements.txt not found."
 fi
 
+# Deploy
+sam deploy \
+    --template-file template.yaml \
+    --resolve-s3 \
+    --stack-name $STACK_NAME \
+    --capabilities CAPABILITY_NAMED_IAM
 
+# Remove dir after deployment
+rm -rf "$DEPLOY_DIR"
 
 echo "Deployment complete."

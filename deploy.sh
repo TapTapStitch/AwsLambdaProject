@@ -8,9 +8,9 @@ STACK_NAME="AwsLambdaProject"
 mkdir -p "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_layer"
 mkdir -p "$DEPLOY_DIR/lambda_functions"
 
-# Array of function names
+# Array of names
 FUNCTIONS=(create_post update_post delete_post get_post get_posts get_public_posts)
-UTILS=(utils decorators schemas)
+UTILS=(utils decorators schemas validators)
 
 # Loop through each function name
 for FUNCTION in "${FUNCTIONS[@]}"; do
@@ -37,7 +37,11 @@ done
 
 # Install packages from requirements.txt
 if [ -f "lambda_layer/requirements.txt" ]; then
-    pip install -r "lambda_layer/requirements.txt" --target "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages"
+  docker build -t lambda-packager .
+  docker run --name lambda-container lambda-packager
+  docker cp lambda-container:/var/task/python $DEPLOY_DIR/lambda_layer
+  docker rm lambda-container
+  docker rmi lambda-packager
 else
     echo "Warning: lambda_layer/requirements.txt not found."
 fi

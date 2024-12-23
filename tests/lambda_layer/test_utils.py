@@ -106,7 +106,7 @@ def test_update_post_validation_error(post_service):
     post_id = create_response["data"]["id"]
     update_response = post_service.update_post(post_id, {"title": "", "body": ""})
     assert not update_response["success"]
-    assert "error" in update_response["error"]
+    assert "Validation error" in update_response["error"]
 
 
 def test_delete_post_success(post_service):

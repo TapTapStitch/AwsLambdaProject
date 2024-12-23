@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 from jsonschema import validate
 from lambda_layer.decorators import exception_handler
 from lambda_layer.schemas import post_schema
-from lambda_layer.validators import PostModel
 
 
 class PostService:
@@ -75,11 +74,9 @@ class PostService:
 
     @exception_handler
     def update_post(self, post_id, update_data):
-        validated_data = PostModel(**update_data)
+        self._validate_post_data(update_data)
 
-        expression, expression_values = self._create_update_expression(
-            validated_data.model_dump(exclude_unset=True)
-        )
+        expression, expression_values = self._create_update_expression(update_data)
 
         self.table.update_item(
             Key={"id": post_id},

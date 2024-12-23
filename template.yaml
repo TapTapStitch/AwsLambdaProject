@@ -93,7 +93,7 @@ Resources:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
       LayerName: my-lambda-layer
-      ContentUri: ./lambda_functions/lambda_layer
+      ContentUri: ./deploy/lambda_layer
       CompatibleRuntimes:
         - python3.13
       RetentionPolicy: Retain
@@ -115,7 +115,7 @@ Resources:
       FunctionName: getPosts
       Handler: get_posts.lambda_handler
       Runtime: python3.13
-      CodeUri: ./lambda_functions/get_posts
+      CodeUri: ./deploy/lambda_functions/get_posts
       Role: !GetAtt LambdaExecutionRole.Arn
       Layers:
         - Ref: MyLambdaLayer
@@ -135,7 +135,7 @@ Resources:
       FunctionName: getPostsPublic
       Handler: get_public_posts.lambda_handler
       Runtime: python3.13
-      CodeUri: ./lambda_functions/get_public_posts
+      CodeUri: ./deploy/lambda_functions/get_public_posts
       Role: !GetAtt LambdaExecutionRole.Arn
       Layers:
         - Ref: MyLambdaLayer
@@ -155,7 +155,7 @@ Resources:
       FunctionName: getPostById
       Handler: get_post.lambda_handler
       Runtime: python3.13
-      CodeUri: ./lambda_functions/get_post
+      CodeUri: ./deploy/lambda_functions/get_post
       Role: !GetAtt LambdaExecutionRole.Arn
       Layers:
         - Ref: MyLambdaLayer
@@ -175,7 +175,7 @@ Resources:
       FunctionName: createPost
       Handler: create_post.lambda_handler
       Runtime: python3.13
-      CodeUri: ./lambda_functions/create_post
+      CodeUri: ./deploy/lambda_functions/create_post
       Role: !GetAtt LambdaExecutionRole.Arn
       Layers:
         - Ref: MyLambdaLayer
@@ -195,7 +195,7 @@ Resources:
       FunctionName: updatePost
       Handler: update_post.lambda_handler
       Runtime: python3.13
-      CodeUri: ./lambda_functions/update_post
+      CodeUri: ./deploy/lambda_functions/update_post
       Role: !GetAtt LambdaExecutionRole.Arn
       Layers:
         - Ref: MyLambdaLayer
@@ -215,7 +215,7 @@ Resources:
       FunctionName: deletePost
       Handler: delete_post.lambda_handler
       Runtime: python3.13
-      CodeUri: ./lambda_functions/delete_post
+      CodeUri: ./deploy/lambda_functions/delete_post
       Role: !GetAtt LambdaExecutionRole.Arn
       Layers:
         - Ref: MyLambdaLayer

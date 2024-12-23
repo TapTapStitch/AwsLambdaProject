@@ -1,5 +1,5 @@
 import json
-from utils import PostService
+from lambda_functions.lambda_layer.utils import PostService
 
 
 def lambda_handler(event, context):

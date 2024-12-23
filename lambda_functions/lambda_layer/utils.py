@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from boto3.dynamodb.conditions import Key
 from jsonschema import validate
-from decorators import exception_handler
+from lambda_functions.lambda_layer.decorators import exception_handler
 
 
 def post_schema():

@@ -1,5 +1,5 @@
 from jsonschema import ValidationError
-from lambda_functions.lambda_layer.decorators import exception_handler
+from lambda_layer.decorators import exception_handler
 
 
 class MockService:

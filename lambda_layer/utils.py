@@ -1,9 +1,8 @@
 import boto3
 import uuid
 from datetime import datetime, timezone
-from boto3.dynamodb.conditions import Key
 from jsonschema import validate
-from lambda_functions.lambda_layer.decorators import exception_handler
+from lambda_layer.decorators import exception_handler
 
 
 def post_schema():
@@ -15,7 +14,7 @@ def post_schema():
             "tags": {"type": "array", "items": {"type": "string"}},
         },
         "required": ["title", "body"],
-        "additionalProperties": False
+        "additionalProperties": False,
     }
     return schema
 

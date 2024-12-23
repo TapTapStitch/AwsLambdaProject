@@ -1,7 +1,7 @@
 import pytest
 from moto import mock_dynamodb
 import boto3
-from lambda_functions.lambda_layer.utils import PostService
+from lambda_layer.utils import PostService
 from datetime import datetime, timezone
 
 

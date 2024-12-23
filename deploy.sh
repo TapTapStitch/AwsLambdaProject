@@ -10,6 +10,7 @@ mkdir -p "$DEPLOY_DIR/lambda_functions"
 
 # Array of function names
 FUNCTIONS=(create_post update_post delete_post get_post get_posts get_public_posts)
+UTILS=(utils decorators)
 
 # Loop through each function name
 for FUNCTION in "${FUNCTIONS[@]}"; do
@@ -28,17 +29,14 @@ done
 touch "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_functions/__init__.py"
 touch "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_functions/lambda_layer/__init__.py"
 
-if [ -f "lambda_functions/lambda_layer/decorators.py" ]; then
-    cp "lambda_functions/lambda_layer/decorators.py" "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_functions/lambda_layer/"
-else
-    echo "Warning: lambda_functions/lambda_layer/decorators.py not found."
-fi
-
-if [ -f "lambda_functions/lambda_layer/utils.py" ]; then
-    cp "lambda_functions/lambda_layer/utils.py" "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_functions/lambda_layer/"
-else
-    echo "Warning: lambda_functions/lambda_layer/utils.py not found."
-fi
+# Loop through each util name
+for UTIL in "${UTILS[@]}"; do
+    if [ -f "lambda_functions/lambda_layer/$UTIL.py" ]; then
+        cp "lambda_functions/lambda_layer/$UTIL.py" "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_functions/lambda_layer/"
+    else
+        echo "Warning: lambda_functions/lambda_layer/$UTIL.py not found."
+    fi
+done
 
 # Install packages from requirements.txt
 if [ -f "lambda_functions/lambda_layer/requirements.txt" ]; then

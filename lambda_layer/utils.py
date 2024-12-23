@@ -3,20 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from jsonschema import validate
 from lambda_layer.decorators import exception_handler
-
-
-def post_schema():
-    schema = {
-        "type": "object",
-        "properties": {
-            "title": {"type": "string", "minLength": 1, "maxLength": 200},
-            "body": {"type": "string", "minLength": 1, "maxLength": 2000},
-            "tags": {"type": "array", "items": {"type": "string"}},
-        },
-        "required": ["title", "body"],
-        "additionalProperties": False,
-    }
-    return schema
+from lambda_layer.schemas import post_schema
 
 
 class PostService:

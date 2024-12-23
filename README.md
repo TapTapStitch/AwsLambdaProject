@@ -330,7 +330,3 @@ Your repository structure might look like this:
     |-- template.yaml
     |-- README.md
 ```
-
-### Additional Considerations
-
-- **Documentation**: Provide a `README.md` file detailing

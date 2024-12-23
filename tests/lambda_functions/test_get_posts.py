@@ -1,6 +1,6 @@
 import pytest
 import json
-from lambda_functions.get_posts import lambda_handler
+from lambda_functions.get_posts.get_posts import lambda_handler
 
 
 class MockPostService:

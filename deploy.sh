@@ -14,10 +14,8 @@ UTILS=(utils decorators)
 
 # Loop through each function name
 for FUNCTION in "${FUNCTIONS[@]}"; do
-    # Create a directory for each function in lambda_functions
     mkdir -p "$DEPLOY_DIR/lambda_functions/$FUNCTION"
 
-    # Copy the corresponding Python file to its directory
     if [ -f "lambda_functions/$FUNCTION.py" ]; then
         cp "lambda_functions/$FUNCTION.py" "$DEPLOY_DIR/lambda_functions/$FUNCTION/"
     else

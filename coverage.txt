@@ -1,15 +1,30 @@
 ---------- coverage: platform darwin, python 3.13.0-final-0 ----------
-Name                                          Stmts   Miss  Cover
------------------------------------------------------------------
-lambda_functions/__init__.py                      0      0   100%
-lambda_functions/create_post.py                  15      0   100%
-lambda_functions/delete_post.py                  12      0   100%
-lambda_functions/get_post.py                     12      0   100%
-lambda_functions/get_posts.py                    23      0   100%
-lambda_functions/get_public_posts.py             24      0   100%
-lambda_functions/lambda_layer/__init__.py         0      0   100%
-lambda_functions/lambda_layer/decorators.py      10      0   100%
-lambda_functions/lambda_layer/utils.py           64      1    98%
-lambda_functions/update_post.py                  15      0   100%
------------------------------------------------------------------
-TOTAL                                           175      1    99%
+Name                                              Stmts   Miss  Cover
+---------------------------------------------------------------------
+lambda_functions/__init__.py                          0      0   100%
+lambda_functions/create_post.py                      15      0   100%
+lambda_functions/delete_post.py                      12      0   100%
+lambda_functions/get_post.py                         12      0   100%
+lambda_functions/get_posts.py                        23      0   100%
+lambda_functions/get_public_posts.py                 24      0   100%
+lambda_functions/update_post.py                      15      0   100%
+lambda_layer/__init__.py                              0      0   100%
+lambda_layer/decorators.py                           10      0   100%
+lambda_layer/schemas.py                               3      0   100%
+lambda_layer/utils.py                                62      1    98%
+lambda_layer/validators.py                            6      0   100%
+tests/__init__.py                                     0      0   100%
+tests/lambda_functions/__init__.py                    0      0   100%
+tests/lambda_functions/test_create_post.py           41      0   100%
+tests/lambda_functions/test_delete_post.py           38      0   100%
+tests/lambda_functions/test_get_post.py              40      0   100%
+tests/lambda_functions/test_get_posts.py             53      0   100%
+tests/lambda_functions/test_get_public_posts.py      57      0   100%
+tests/lambda_functions/test_update_post.py           52      0   100%
+tests/lambda_layer/__init__.py                        0      0   100%
+tests/lambda_layer/test_decorators.py                29      0   100%
+tests/lambda_layer/test_schemas.py                    5      0   100%
+tests/lambda_layer/test_utils.py                     76      0   100%
+tests/lambda_layer/test_validators.py                30      0   100%
+---------------------------------------------------------------------
+TOTAL                                               603      1    99%

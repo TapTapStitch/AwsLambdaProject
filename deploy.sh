@@ -37,7 +37,7 @@ done
 
 # Install packages from requirements.txt
 if [ -f "lambda_layer/requirements.txt" ]; then
-    pip install -r "lambda_layer/requirements.txt" --target "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages"
+      pip install -r "lambda_layer/requirements.txt" --target "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages" --only-binary=:all: --platform manylinux2014_x86_64
 else
     echo "Warning: lambda_layer/requirements.txt not found."
 fi

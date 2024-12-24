@@ -8,9 +8,9 @@ STACK_NAME="AwsLambdaProject"
 mkdir -p "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages/lambda_layer"
 mkdir -p "$DEPLOY_DIR/lambda_functions"
 
-# Array of names
+# Array of function names
 FUNCTIONS=(create_post update_post delete_post get_post get_posts get_public_posts)
-UTILS=(utils decorators schemas validators)
+UTILS=(utils decorators schemas)
 
 # Loop through each function name
 for FUNCTION in "${FUNCTIONS[@]}"; do

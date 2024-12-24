@@ -13,7 +13,7 @@ def lambda_handler(event, context):
         return {"statusCode": 200, "body": json.dumps(response["data"])}
     else:
         error_message = response["error"]
-        if "error" in error_message:
+        if "Validation error" in error_message:
             return {
                 "statusCode": 422,
                 "body": json.dumps(

@@ -3,7 +3,7 @@ from lambda_layer.utils import PostService
 
 
 def lambda_handler(event, context):
-    post_id = event["pathParameters"]["id"]
+    post_id = event["pathParameters"]["postId"]
     update_data = json.loads(event["body"])
 
     post_service = PostService()

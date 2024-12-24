@@ -67,7 +67,7 @@ def mock_post_service_error(monkeypatch):
 
 def test_update_post_success(mock_post_service_success):
     event = {
-        "pathParameters": {"id": "1"},
+        "pathParameters": {"postId": "1"},
         "body": json.dumps(
             {
                 "title": "Updated Post Title",
@@ -88,7 +88,7 @@ def test_update_post_success(mock_post_service_success):
 
 def test_update_post_validation_error(mock_post_service_validation_error):
     event = {
-        "pathParameters": {"id": "1"},
+        "pathParameters": {"postId": "1"},
         "body": json.dumps(
             {"title": "", "body": "Updated post body", "tags": ["tag1"]}
         ),
@@ -104,7 +104,7 @@ def test_update_post_validation_error(mock_post_service_validation_error):
 
 def test_update_post_not_found(mock_post_service_not_found):
     event = {
-        "pathParameters": {"id": "999"},
+        "pathParameters": {"postId": "999"},
         "body": json.dumps(
             {"title": "New Title", "body": "New body text", "tags": ["tag1"]}
         ),
@@ -119,7 +119,7 @@ def test_update_post_not_found(mock_post_service_not_found):
 
 def test_update_post_error(mock_post_service_error):
     event = {
-        "pathParameters": {"id": "1"},
+        "pathParameters": {"postId": "1"},
         "body": json.dumps(
             {
                 "title": "Post Title",

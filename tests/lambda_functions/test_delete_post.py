@@ -45,7 +45,7 @@ def mock_post_service_error(monkeypatch):
 
 
 def test_delete_post_success(mock_post_service_success):
-    event = {"pathParameters": {"id": "1"}}
+    event = {"pathParameters": {"postId": "1"}}
 
     result = lambda_handler(event, None)
 
@@ -54,7 +54,7 @@ def test_delete_post_success(mock_post_service_success):
 
 
 def test_delete_post_not_found(mock_post_service_not_found):
-    event = {"pathParameters": {"id": "999"}}
+    event = {"pathParameters": {"postId": "999"}}
 
     result = lambda_handler(event, None)
 
@@ -64,7 +64,7 @@ def test_delete_post_not_found(mock_post_service_not_found):
 
 
 def test_delete_post_error(mock_post_service_error):
-    event = {"pathParameters": {"id": "1"}}
+    event = {"pathParameters": {"postId": "1"}}
 
     result = lambda_handler(event, None)
 

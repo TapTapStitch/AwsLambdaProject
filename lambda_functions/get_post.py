@@ -3,7 +3,7 @@ from lambda_layer.utils import PostService
 
 
 def lambda_handler(event, context):
-    post_id = event["pathParameters"]["id"]
+    post_id = event["pathParameters"]["postId"]
     post_service = PostService()
     response = post_service.get_post_by_id(post_id)
 

@@ -164,7 +164,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
-            Path: /posts/{postId}
+            Path: /post/{postId}
             Method: get
             Auth:
               Authorizer: CognitoAuthorizer
@@ -204,7 +204,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
-            Path: /posts/{postId}
+            Path: /post/{postId}
             Method: patch
             Auth:
               Authorizer: CognitoAuthorizer
@@ -224,7 +224,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGateway
-            Path: /posts/{postId}
+            Path: /post/{postId}
             Method: delete
             Auth:
               Authorizer: CognitoAuthorizer

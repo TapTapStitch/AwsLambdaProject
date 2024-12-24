@@ -37,11 +37,7 @@ done
 
 # Install packages from requirements.txt
 if [ -f "lambda_layer/requirements.txt" ]; then
-  docker build -t lambda-packager .
-  docker run --name lambda-container lambda-packager
-  docker cp lambda-container:/var/task/python $DEPLOY_DIR/lambda_layer
-  docker rm lambda-container
-  docker rmi lambda-packager
+      pip install -r "lambda_layer/requirements.txt" --target "$DEPLOY_DIR/lambda_layer/python/lib/python3.13/site-packages" --only-binary=:all: --platform manylinux2014_x86_64
 else
     echo "Warning: lambda_layer/requirements.txt not found."
 fi

@@ -1,5 +1,5 @@
 import pytest
-from moto import mock_dynamodb
+from moto import mock_aws
 import boto3
 from lambda_layer.utils import PostService
 from datetime import datetime, timezone
@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 
 @pytest.fixture
 def dynamodb():
-    with mock_dynamodb():
+    with mock_aws():
         yield boto3.resource("dynamodb", region_name="eu-north-1")
 
 

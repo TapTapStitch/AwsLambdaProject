@@ -20,7 +20,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -57,7 +57,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -111,7 +111,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -161,7 +161,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -211,7 +211,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -254,7 +254,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -288,7 +288,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "Bearer {{accessToken}}",
+											"value": "{{id_token}}",
 											"type": "string"
 										}
 									]
@@ -355,7 +355,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "Bearer {{accessToken}}",
+							"value": "{{id_token}}",
 							"type": "string"
 						}
 					]
@@ -428,7 +428,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "Bearer {{accessToken}}",
+							"value": "{{id_token}}",
 							"type": "string"
 						}
 					]
@@ -497,7 +497,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "Bearer {{accessToken}}",
+							"value": "{{id_token}}",
 							"type": "string"
 						}
 					]
@@ -567,7 +567,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "Bearer {{accessToken}}",
+							"value": "{{id_token}}",
 							"type": "string"
 						}
 					]
@@ -616,7 +616,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "Bearer {{accessToken}}",
+							"value": "{{id_token}}",
 							"type": "string"
 						}
 					]
@@ -673,6 +673,9 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -698,6 +701,69 @@
 						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "My app token",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://diary-app.auth.eu-north-1.amazoncognito.com/oauth2/token",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "scope",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://diary-app.auth.eu-north-1.amazoncognito.com/oauth2/authorize",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}

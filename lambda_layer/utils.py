@@ -12,28 +12,6 @@ class PostService:
         self.dynamodb = boto3.resource("dynamodb", region_name=region_name)
         self.table = self.dynamodb.Table(table_name)
 
-    def _validate_post_data(self, data):
-        validate(instance=data, schema=post_schema())
-
-    def _format_post_data(self, post_data):
-        return {
-            "id": post_data.get("id"),
-            "title": post_data.get("title"),
-            "body": post_data.get("body"),
-            "createdDate": post_data.get("createdDate"),
-            "updatedDate": post_data.get("updatedDate"),
-            "tags": post_data.get("tags", []),
-        }
-
-    def _response(self, success, data=None, error=None):
-        return {"success": success, "data": data, "error": error}
-
-    def _create_update_expression(self, update_data):
-        update_data["updatedDate"] = datetime.now(timezone.utc).isoformat()
-        expression = "SET " + ", ".join(f"{k}=:{k}" for k in update_data.keys())
-        expression_values = {f":{k}": v for k, v in update_data.items()}
-        return expression, expression_values
-
     @exception_handler
     def get_all_posts(self):
         response = self.table.scan()
@@ -97,3 +75,25 @@ class PostService:
     def delete_post(self, post_id):
         self.table.delete_item(Key={"id": post_id})
         return self._response(success=True, data="Post deleted successfully")
+
+    def _validate_post_data(self, data):
+        validate(instance=data, schema=post_schema())
+
+    def _format_post_data(self, post_data):
+        return {
+            "id": post_data.get("id"),
+            "title": post_data.get("title"),
+            "body": post_data.get("body"),
+            "createdDate": post_data.get("createdDate"),
+            "updatedDate": post_data.get("updatedDate"),
+            "tags": post_data.get("tags", []),
+        }
+
+    def _response(self, success, data=None, error=None):
+        return {"success": success, "data": data, "error": error}
+
+    def _create_update_expression(self, update_data):
+        update_data["updatedDate"] = datetime.now(timezone.utc).isoformat()
+        expression = "SET " + ", ".join(f"{k}=:{k}" for k in update_data.keys())
+        expression_values = {f":{k}": v for k, v in update_data.items()}
+        return expression, expression_values

@@ -1,8 +1,8 @@
-from pydantic import BaseModel, constr
-from typing import List, Optional
+from pydantic import BaseModel, Field
+from typing import List
 
 
 class PostModel(BaseModel):
-    title: constr(min_length=1, max_length=200)
-    body: constr(min_length=1, max_length=2000)
-    tags: Optional[List[constr(min_length=1)]] = []
+    title: str = Field(..., min_length=1, max_length=200)
+    body: str = Field(..., min_length=1, max_length=2000)
+    tags: List[str] | None = []
